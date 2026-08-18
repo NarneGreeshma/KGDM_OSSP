@@ -1,0 +1,78 @@
+CASE STUDY 5: CHANGING FILE OWNERSHIP
+
+SCENARIO
+A Linux administrator executes:
+chown student:faculty project.txt
+
+5A. LINUX SOFTWARE STACK
+
+User -> Bash Shell -> chown -> System Call -> Linux Kernel -> File System -> Storage Hardware
+
+1. User executes the chown command.
+2. Bash interprets and executes the command.
+3. chown is the user-space program.
+4. chown() is the system call.
+5. Linux Kernel checks privileges and modifies file metadata.
+6. File System updates UID and GID.
+7. Storage Hardware stores the updated metadata.
+
+5B. INVESTIGATION PLAN
+
+1. USER-SPACE PROGRAM
+
+Command:
+which chown
+
+Output:
+/usr/bin/chown
+
+2. SYSTEM CALL
+
+Command:
+sudo strace chown student:faculty project.txt
+
+Important output:
+chown("project.txt", 1001, 1002) = 0
+
+= 0 means the system call succeeded.
+
+3. USER MODE TO KERNEL MODE
+
+The chown() system call transfers control from User Mode to Kernel Mode. The kernel performs the privileged ownership operation and returns control to the user program.
+
+4. KERNEL SERVICE
+
+The Linux Kernel and Virtual File System (VFS) handle the file metadata modification.
+
+5. VERIFICATION
+
+Command:
+ls -l project.txt
+
+Output:
+-rw-r--r-- 1 student faculty ... project.txt
+
+Command:
+stat project.txt
+
+The output confirms UID 1001 (student) and GID 1002 (faculty).
+
+5C. PRIVILEGE AND ACCESS CONTROL
+
+Changing file ownership is a privileged operation.
+
+1. Normal users cannot normally change ownership of another user's file.
+2. The kernel checks privileges before allowing chown().
+3. Unauthorized requests return EPERM (Operation not permitted).
+
+COMMANDS EXECUTED
+
+sudo chown student:faculty project.txt
+which chown
+sudo strace chown student:faculty project.txt
+ls -l project.txt
+stat project.txt
+
+CONCLUSION
+
+The chown command was successfully executed and traced using strace. The chown() system call and UID/GID ownership change were verified using ls -l and stat.
