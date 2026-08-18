@@ -1,0 +1,88 @@
+CASE STUDY 7: ALLOCATING MEMORY
+
+SCENARIO
+A C program dynamically allocates memory using:
+ptr = malloc(1000000);
+
+The program successfully obtains memory for storing data.
+
+7A. MAJOR COMPONENTS
+
+User Application -> C Library malloc() -> System Call -> Linux Kernel -> Virtual Memory Manager -> Physical Memory -> RAM
+
+1. C program requests memory using malloc().
+2. C library provides the malloc() function.
+3. mmap() or brk() may request memory from the kernel.
+4. Linux kernel manages memory allocation.
+5. Virtual Memory Manager maps virtual addresses to physical pages.
+6. Physical memory pages are allocated.
+7. RAM stores the physical memory.
+
+7B. INVESTIGATION PLAN
+
+1. USER-SPACE COMPONENT
+
+The user-space component is malloc() from the C standard library.
+
+2. SYSTEM CALLS
+
+Command:
+strace ./memory 2>&1 | grep -E 'mmap|brk'
+
+Important output:
+mmap(NULL, 1003520, PROT_READ|PROT_WRITE, MAP_PRIVATE|MAP_ANONYMOUS, -1, 0) = ...
+
+brk(...) = ...
+
+3. USER MODE TO KERNEL MODE
+
+When mmap() or brk() is invoked, control transfers from User Mode to Kernel Mode. The kernel performs the memory-management operation and returns control to the program.
+
+4. KERNEL MEMORY MANAGEMENT
+
+The Linux kernel Virtual Memory Management subsystem manages virtual address spaces, page tables and physical memory pages.
+
+5. VIRTUAL MEMORY
+
+Each process receives its own virtual address space. Virtual addresses are translated to physical addresses using page tables and the MMU.
+
+6. PHYSICAL MEMORY
+
+Physical memory consists of RAM pages. The kernel maps physical pages to the process's virtual address space.
+
+7. VERIFICATION
+
+Command:
+cat /proc/$$/maps | head
+
+The output shows virtual memory regions such as the heap and shared libraries.
+
+MEMORY RELEASE
+
+The program calls free(ptr). The trace showed:
+
+munmap(..., 1003520) = 0
+
+This indicates that the memory mapping was successfully released.
+
+7C. MEMORY PROTECTION
+
+1. Each process has a separate virtual address space.
+2. Page tables and the MMU enforce memory access permissions.
+3. Unauthorized access causes a page/protection fault and is prevented by the operating system.
+
+COMMANDS EXECUTED
+
+gcc memory.c -o memory
+./memory
+strace ./memory 2>&1 | grep -E 'mmap|brk'
+strace ./memory 2>&1 | grep -E 'mmap|brk|munmap' | tail -5
+cat /proc/$$/maps | head
+
+RESULT
+
+The C program successfully allocated 1,000,000 bytes using malloc(). The strace output demonstrated mmap() and brk() system calls, while /proc/$$/maps demonstrated virtual memory mappings.
+
+CONCLUSION
+
+This case study demonstrates how dynamic memory allocation works through the C library, system calls, Linux kernel memory management, virtual memory and physical RAM.
