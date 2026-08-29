@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -g
 
 TARGET = skill1
 
@@ -9,4 +9,6 @@ $(TARGET): skill1.c
 	$(CC) $(CFLAGS) skill1.c -o $(TARGET)
 
 clean:
-	rm -f $(TARGET)
+	rm -f $(TARGET) trace.txt testtrace.txt
+
+.PHONY: all clean
