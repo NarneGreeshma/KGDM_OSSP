@@ -1,5 +1,5 @@
 CC = gcc
-CFLAGS = -Wall -Wextra
+CFLAGS = -Wall -Wextra -g
 
 TARGET = skill2
 
@@ -10,3 +10,5 @@ $(TARGET): skill2.c
 
 clean:
 	rm -f $(TARGET)
+
+.PHONY: all clean
