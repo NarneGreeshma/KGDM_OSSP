@@ -10,3 +10,5 @@ $(TARGET): skill3.c
 
 clean:
 	rm -f $(TARGET)
+
+.PHONY: all clean
