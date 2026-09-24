@@ -1,0 +1,10 @@
+Worker 1 processed Task 1: 10 -> 100
+Worker 2 processed Task 2: 20 -> 400
+Worker 3 processed Task 3: 30 -> 900
+Worker 3 processed Task 4: 40 -> 1600
+Worker 2 processed Task 5: 50 -> 2500
+Worker 2 processed Task 6: 60 -> 3600
+Worker 3 processed Task 7: 70 -> 4900
+Worker 1 processed Task 8: 80 -> 6400
+Worker 2 processed Task 9: 90 -> 8100
+Worker 2 processed Task 10: 100 -> 10000
