@@ -1,0 +1,1 @@
+ls: cannot access '/wrongpath': No such file or directory
